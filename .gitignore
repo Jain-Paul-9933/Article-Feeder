@@ -1,0 +1,41 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# Database
+*.sqlite3
+*.db
+
+# Static files
+staticfiles/
+.media/
+
+# Virtual Environment
+venv/
+.env
+
+# Secret key
+*.secret_key
+
+# IDE settings
+.idea/
+.vscode/
+
+# Compiled Python files
+*.pyc
+
+# Dependency directories
+.env/
+env/
+
+# macOS
+.DS_Store
+
+# Node.js
+node_modules/
+
+# Visual Studio Code
+.vscode/
