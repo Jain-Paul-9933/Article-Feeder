@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { registerUser } from "../slices/authSlice";
 import { useApiUrl } from "../contexts/ApiContext";
+import { Container, Form, Button } from 'react-bootstrap';
 
 const RegistrationForm = () => {
   const apiUrl = useApiUrl();
 
   const dispatch = useDispatch();
+
+  const history = useHistory();
 
   const [formData, setFormData] = useState({
     username:"",
@@ -35,169 +39,143 @@ const RegistrationForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(registerUser(formData, apiUrl));
-    console.log("Submit Worked");
+    try {
+      dispatch(registerUser(formData, apiUrl));
+      console.log('Registration successful');
+      history.push('/login');
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
   };
 
   return (
-    <div className="container">
+    <Container>
       <h2 className="mt-5">Registration</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="userName" className="form-label">
-            Username
-          </label>
-          <input
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="userName">Username</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             id="username"
             name="username"
             value={formData.username}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="firstName" className="form-label">
-            First Name
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="firstName">First Name</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             id="first_name"
             name="first_name"
             value={formData.first_name}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="lastName" className="form-label">
-            Last Name
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="lastName">Last Name</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             id="last_name"
             name="last_name"
             value={formData.last_name}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="email">Email</Form.Label>
+          <Form.Control
             type="email"
-            className="form-control"
             id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">
-            Phone
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="phone">Phone</Form.Label>
+          <Form.Control
             type="tel"
-            className="form-control"
             id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="dob" className="form-label">
-            Date of Birth
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="dob">Date of Birth</Form.Label>
+          <Form.Control
             type="date"
-            className="form-control"
             id="dob"
             name="dob"
             value={formData.dob}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="password">Password</Form.Label>
+          <Form.Control
             type="password"
-            className="form-control"
             id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="confirmPassword" className="form-label">
-            Confirm Password
-          </label>
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="confirmPassword">Confirm Password</Form.Label>
+          <Form.Control
             type="password"
-            className="form-control"
             id="confirm_password"
             name="confirm_password"
             value={formData.confirm_password}
             onChange={handleChange}
             required
           />
-        </div>
+        </Form.Group>
 
-        {/* <div className="mb-3">
-          <label className="form-label">Article Preferences</label>
-          <div>
-            <input
-              type="checkbox"
-              id="preference1"
-              name="article_preferences"
-              value="1"
-              onChange={handleCheckboxChange}
-              checked={formData.article_preferences.includes("Sports")}
-            />
-            <label htmlFor="preference1" className="ms-2">
-              Sports
-            </label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="preference2"
-              name="article_preferences"
-              value="2"
-              onChange={handleCheckboxChange}
-              checked={formData.article_preferences.includes("Technology")}
-            />
-            <label htmlFor="preference2" className="ms-2">
-              Technology
-            </label>
-          </div>
-        </div> */}
+        {/* Checkbox Example (Uncomment and modify as needed)
+        <Form.Group className="mb-3">
+          <Form.Label>Article Preferences</Form.Label>
+          <Form.Check
+            type="checkbox"
+            label="Sports"
+            id="preference1"
+            name="article_preferences"
+            value="Sports"
+            onChange={handleCheckboxChange}
+            checked={formData.article_preferences.includes('Sports')}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Technology"
+            id="preference2"
+            name="article_preferences"
+            value="Technology"
+            onChange={handleCheckboxChange}
+            checked={formData.article_preferences.includes('Technology')}
+          />
+        </Form.Group> */}
 
-        <button type="submit" className="btn btn-primary">
+        <Button type="submit" variant="primary">
           Register
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
