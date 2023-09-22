@@ -5,6 +5,7 @@ import axios from "axios";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useApiUrl } from "../contexts/ApiContext";
 import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 const EditArticle = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,8 @@ const EditArticle = () => {
 
   const navigate = useNavigate();
 
+  const accessToken = localStorage.getItem("access_token");
+
   const selectedArticleId = useSelector(
     (state) => state.articles.selectedArticle
   );
@@ -20,11 +23,13 @@ const EditArticle = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    image: null,
     tags: "",
     category: "",
+    author: "",
   });
 
-  const accessToken = localStorage.getItem("access_token");
+  console.log(formData)
 
   useEffect(() => {
     if (!accessToken) {
@@ -34,15 +39,16 @@ const EditArticle = () => {
       const fetchArticle = async () => {
         try {
           const response = await axios.get(
-            `${apiUrl}/articles/detail/${selectedArticleId}`,
+            `${apiUrl}/articles/detail/${selectedArticleId}/`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
               },
             }
           );
-          const { name, description, tags, category } = response.data;
-          setFormData({ name, description, tags, category });
+          const { name, description, image, tags, category, author } =
+            response.data;
+          setFormData({ name, description, image, tags, category, author });
         } catch (error) {
           console.error("Error fetching article:", error);
         }
@@ -56,11 +62,15 @@ const EditArticle = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleImageChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.put(
-        `${apiUrl}/articles/detail/${selectedArticleId}`,
+        `${apiUrl}/articles/detail/${selectedArticleId}/`,
         formData,
         {
           headers: {
@@ -72,8 +82,10 @@ const EditArticle = () => {
       setFormData({
         name: "",
         description: "",
+        image: null,
         tags: "",
         category: "",
+        author: "",
       });
       dispatch(setSelectedArticle(null));
       navigate("/list");
@@ -136,6 +148,18 @@ const EditArticle = () => {
                 name="tags"
                 value={formData.tags}
                 onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group controlId="image">
+              <Form.Label>Image</Form.Label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
                 required
               />
             </Form.Group>

@@ -4,17 +4,24 @@ import { setArticles } from "../slices/articlesSlice";
 import axios from "axios";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { useApiUrl } from "../contexts/ApiContext";
+import jwtDecode from "jwt-decode";
 
 const CreateArticle = () => {
   const apiUrl = useApiUrl();
 
+  const accessToken= localStorage.getItem('access_token')
+
+  const user_id = accessToken ? jwtDecode(accessToken).user_id : null;
+
   const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     image: null,
     tags: "",
     category: "",
+    author:user_id,
   });
 
   const handleChange = (e) => {
@@ -115,10 +122,10 @@ const CreateArticle = () => {
               />
             </Form.Group>
           </Col>
-          {/* <Col>
+          <Col>
             <Form.Group controlId="image">
               <Form.Label>Image</Form.Label>
-              <Form.File
+              <input
                 type="file"
                 name="image"
                 accept="image/*"
@@ -126,7 +133,7 @@ const CreateArticle = () => {
                 required
               />
             </Form.Group>
-          </Col> */}
+          </Col>
         </Row>
         <Button type="submit">Create</Button>
       </Form>

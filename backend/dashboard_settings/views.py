@@ -2,13 +2,17 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from article.models import Article
+from article.serializers import ArticleSerializer
 
+class Dashboard(APIView):
 
-class DashboardView(APIView):
+    permission_classes=(IsAuthenticated,)
 
-    permission_classes = (IsAuthenticated,)
+    def get(self,request):
 
-    def get(self, request):
-        content = {
-            'message': 'Welcome to the JWT Authentication page using React Js and Django!'}
-        return Response(content)
+        articles=Article.objects.all()
+
+        serializer=ArticleSerializer(articles,many=True)
+
+        return Response(serializer.data)

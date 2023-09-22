@@ -1,5 +1,5 @@
 from .models import CustomUser
-from .serializers import UserSerializer,MyTokenObtainPairSerializer
+from .serializers import UserSerializer,MyTokenObtainPairSerializer,UpdateUserSerializer
 from rest_framework.views import APIView
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -25,6 +25,22 @@ class UserRegistrationView(generics.CreateAPIView):
 
         serializer.save(password=hashed_password)
 
+class UpdateUserView(generics.RetrieveUpdateAPIView):
+    serializer_class = UpdateUserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+    
+    def perform_update(self, serializer):
+        
+        if 'password' in serializer.validated_data:
+
+            new_password=serializer.validated_data['password']
+            hashed_password=make_password(new_password)
+            serializer.validated_data['password']=hashed_password
+
+        serializer.save()
 
 class LogoutView(APIView):
 
