@@ -13,5 +13,3 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=['phone','username']
 
-# class ArticleCategory(models.Model):
-#     category=models.CharField(max_length=100)

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
-import { useEffect } from "react";
+import setupAxiosInterceptors from "../interceptor/axios";
+import jwt_decode from "jwt-decode"
 
 const authSlice = createSlice({
   name: "auth",
@@ -20,18 +21,22 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     loginSuccess: (state, action) => {
+      console.log('login success action called')
+      console.log(action.payload)
       state.user = action.payload;
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
     },
     loginFailure: (state, action) => {
+      console.log('login failure action called')
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
       state.error = action.payload;
     },
     logoutSuccess: (state) => {
+      console.log('logout success action called')
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
@@ -55,15 +60,17 @@ export const registerUser = (formData, apiUrl) => async (dispatch) => {
       formData
     );
     dispatch(registerSuccess(response.data));
+    window.location.href = "/login";
   } catch (error) {
     dispatch(registerFailure(error.response));
+    window.location.href = "/registration";
   }
 };
 
 export const loginUser = (userData, apiUrl) => async (dispatch) => {
-  console.log("Enterd into login function");
+
+
   try {
-    console.log(userData);
     const response = await axios.post(
       `${apiUrl}/authentification/token/`,
       userData,
@@ -74,15 +81,15 @@ export const loginUser = (userData, apiUrl) => async (dispatch) => {
         withCredentials: true,
       }
     );
-    console.log("Got response");
+
     localStorage.setItem("access_token", response.data.access);
-    localStorage.setItem("refresh_token", response.data.refresh);
+    localStorage.setItem("refresh_token", response.data.refresh)
 
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${response.data.access}`;
-
     dispatch(loginSuccess(response.data));
+    console.log("dipacthed login success action")
     window.location.href = "/";
   } catch (error) {
     console.log("Got error");
@@ -96,7 +103,7 @@ export const logoutUser = (apiUrl) => async (dispatch) => {
     const accessToken = localStorage.getItem("access_token");
 
     if (!accessToken) {
-      return;
+      setupAxiosInterceptors();
     }
 
     await axios.post(

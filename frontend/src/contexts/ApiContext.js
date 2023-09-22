@@ -8,4 +8,4 @@ export const ApiProvider = ({ children }) => {
   return <ApiContext.Provider value={apiUrl}>{children}</ApiContext.Provider>;
 };
 
-export const useApiUrl=()=> useContext(ApiContext)
+export const useApiUrl = () => useContext(ApiContext);

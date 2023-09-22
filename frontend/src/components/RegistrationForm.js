@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { registerUser } from "../slices/authSlice";
 import { useApiUrl } from "../contexts/ApiContext";
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button } from "react-bootstrap";
 
 const RegistrationForm = () => {
   const apiUrl = useApiUrl();
 
   const dispatch = useDispatch();
 
-  const history = useHistory();
-
   const [formData, setFormData] = useState({
-    username:"",
+    username: "",
     first_name: "",
     last_name: "",
     email: "",
@@ -41,10 +38,9 @@ const RegistrationForm = () => {
     e.preventDefault();
     try {
       dispatch(registerUser(formData, apiUrl));
-      console.log('Registration successful');
-      history.push('/login');
+      console.log("Registration successful");
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
     }
   };
 

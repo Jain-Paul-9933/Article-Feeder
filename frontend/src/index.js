@@ -5,7 +5,10 @@ import App from "./App";
 import { ApiProvider } from "./contexts/ApiContext";
 import { Provider } from "react-redux";
 import store from "./store/configureStore";
-// import './interceptor/axios'
+import setupAxiosInterceptors from "./interceptor/axios";
+
+
+setupAxiosInterceptors();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

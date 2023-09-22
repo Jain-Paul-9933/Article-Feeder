@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useApiUrl } from "../contexts/ApiContext";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../slices/authSlice";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { Container, Button, Form } from "react-bootstrap";
 
 const Login = () => {
@@ -11,8 +10,6 @@ const Login = () => {
   const apiUrl = useApiUrl();
 
   const dispatch = useDispatch();
-
-  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
